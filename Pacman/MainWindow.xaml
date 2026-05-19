@@ -1,0 +1,51 @@
+<Window
+    x:Class="Pacman.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid x:Name="RootGrid" Padding="24">
+
+        <ListView ItemsSource="{Binding Programs}">
+            <ListView.ItemTemplate>
+
+                <DataTemplate>
+
+                    <Grid
+                        Padding="12"
+                        ColumnDefinitions="*,Auto">
+
+                        <StackPanel Spacing="4">
+
+                            <TextBlock
+                                Text="{Binding DisplayName}"
+                                FontSize="18"
+                                FontWeight="SemiBold"/>
+
+                            <TextBlock
+                                Text="{Binding Publisher}"
+                                Opacity="0.7"/>
+
+                            <TextBlock
+                                Text="{Binding DisplayVersion}"
+                                Opacity="0.5"/>
+
+                        </StackPanel>
+
+                        <Button
+                            Grid.Column="1"
+                            Content="Uninstall"
+                            Click="UninstallButton_Click"/>
+
+                    </Grid>
+
+                </DataTemplate>
+
+            </ListView.ItemTemplate>
+        </ListView>
+
+    </Grid>
+
+</Window>

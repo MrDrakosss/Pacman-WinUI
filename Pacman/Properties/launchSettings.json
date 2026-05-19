@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Pacman (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Pacman (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
