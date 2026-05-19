@@ -1,4 +1,4 @@
-using Microsoft.UI;
+﻿using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -16,13 +16,16 @@ public sealed partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        // Use the generated InitializeComponent from XAML; no manual stub is present.
 
         RootGrid.DataContext = ViewModel;
 
         SetLightTitleBar();
     }
 
+    private void InitializeComponent()
+    {
+        throw new NotImplementedException();
+    }
 
     private void SetLightTitleBar()
     {

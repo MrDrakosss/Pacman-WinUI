@@ -1,52 +1,9 @@
-# Visual Studio
-.vs/
-*.user
-*.suo
-*.userosscache
-*.sln.docstates
-
-# Build folders
-bin/
-obj/
-
-# Rider
-.idea/
-
-# VS Code
-.vscode/
-
-# WinUI / MSIX
-AppPackages/
-BundleArtifacts/
-
-# NuGet
-*.nupkg
-packages/
-
-# Logs
-*.log
-
-# Temporary files
-*.tmp
-*.temp
-
-# Windows
-Thumbs.db
-Desktop.ini
-
-# Publish
-publish/
-
-# Test results
-TestResults/
-
-# Generated files
-Generated Files/
-
-# Resharper
-_ReSharper*/
-*.DotSettings.user
-
-# WinUI generated
-*.g.cs
-*.g.i.cs
+# For projects that use the Waf build system: https://waf.io/
+# Dot-hidden on Unix-like systems
+.waf-*-*/
+.waf3-*-*/
+# Hidden directory on Windows (no dot)
+waf-*-*/
+waf3-*-*/
+# Lockfile
+.lock-waf_*_build

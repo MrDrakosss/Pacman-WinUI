@@ -48,8 +48,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Helpers\" />
     <Folder Include="Views\" />
   </ItemGroup>

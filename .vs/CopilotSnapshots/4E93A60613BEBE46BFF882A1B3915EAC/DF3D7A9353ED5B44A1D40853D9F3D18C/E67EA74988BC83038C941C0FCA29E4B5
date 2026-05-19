@@ -1,0 +1,118 @@
+﻿using Microsoft.UI;
+using Microsoft.UI.Windowing;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Pacman.Models;
+using Pacman.ViewModels;
+using System;
+using WinRT.Interop;
+
+namespace Pacman;
+
+public sealed partial class MainWindow : Window
+{
+    public MainViewModel ViewModel { get; } = new();
+
+    private Grid RootGrid;
+
+    public MainWindow()
+    {
+        InitializeComponent();
+
+        RootGrid.DataContext = ViewModel;
+
+        SetLightTitleBar();
+    }
+
+    // Minimal runtime InitializeComponent to ensure named XAML elements exist
+    // and basic data bindings work when generated InitializeComponent is not available.
+    private void InitializeComponent()
+    {
+        RootGrid = new Grid
+        {
+            RequestedTheme = ElementTheme.Light,
+            Background = new Microsoft.UI.Xaml.Media.SolidColorBrush(Windows.UI.Color.FromArgb(255, 245, 245, 245)),
+            Padding = new Thickness(24)
+        };
+
+        RootGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        RootGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        RootGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+
+        var headerPanel = new StackPanel { Spacing = 4 };
+        var title = new TextBlock
+        {
+            Text = "Pacman Uninstaller",
+            FontSize = 32,
+            FontWeight = Microsoft.UI.Text.FontWeights.SemiBold,
+            Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Windows.UI.Color.FromArgb(255, 31, 31, 31))
+        };
+        var subtitle = new TextBlock
+        {
+            Text = "Telepített programok kezelése",
+            FontSize = 14,
+            Foreground = new Microsoft.UI.Xaml.Media.SolidColorBrush(Windows.UI.Color.FromArgb(255, 102, 102, 102))
+        };
+        headerPanel.Children.Add(title);
+        headerPanel.Children.Add(subtitle);
+
+        RootGrid.Children.Add(headerPanel);
+
+        var searchBox = new TextBox
+        {
+            Margin = new Thickness(0, 20, 0, 16),
+            Height = 42,
+            PlaceholderText = "Program keresése..."
+        };
+        Grid.SetRow(searchBox, 1);
+        var binding = new Microsoft.UI.Xaml.Data.Binding("SearchText") { Mode = Microsoft.UI.Xaml.Data.BindingMode.TwoWay };
+        searchBox.SetBinding(TextBox.TextProperty, binding);
+        RootGrid.Children.Add(searchBox);
+
+        var listView = new ListView { Background = new Microsoft.UI.Xaml.Media.SolidColorBrush(Windows.UI.Colors.Transparent) };
+        Grid.SetRow(listView, 2);
+        var itemsBinding = new Microsoft.UI.Xaml.Data.Binding("Programs");
+        listView.SetBinding(ListView.ItemsSourceProperty, itemsBinding);
+        RootGrid.Children.Add(listView);
+
+        this.Content = RootGrid;
+    }
+
+    private void SetLightTitleBar()
+    {
+        var hwnd = WindowNative.GetWindowHandle(this);
+        var windowId = Win32Interop.GetWindowIdFromWindow(hwnd);
+        var appWindow = AppWindow.GetFromWindowId(windowId);
+
+        appWindow.Title = "Pacman Uninstaller";
+
+        if (AppWindowTitleBar.IsCustomizationSupported())
+        {
+            var titleBar = appWindow.TitleBar;
+
+            titleBar.BackgroundColor = Colors.White;
+            titleBar.ForegroundColor = Colors.Black;
+
+            titleBar.InactiveBackgroundColor = Colors.White;
+            titleBar.InactiveForegroundColor = Colors.Gray;
+
+            titleBar.ButtonBackgroundColor = Colors.White;
+            titleBar.ButtonForegroundColor = Colors.Black;
+
+            titleBar.ButtonHoverBackgroundColor = Windows.UI.Color.FromArgb(255, 230, 230, 230);
+            titleBar.ButtonHoverForegroundColor = Colors.Black;
+
+            titleBar.ButtonPressedBackgroundColor = Windows.UI.Color.FromArgb(255, 210, 210, 210);
+            titleBar.ButtonPressedForegroundColor = Colors.Black;
+        }
+    }
+
+    private void UninstallButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button button &&
+            button.DataContext is InstalledProgram program)
+        {
+            ViewModel.UninstallCommand.Execute(program);
+        }
+    }
+}
