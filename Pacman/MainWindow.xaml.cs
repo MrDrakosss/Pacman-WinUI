@@ -4,6 +4,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Pacman.Models;
 using Pacman.ViewModels;
+using System;
 using WinRT.Interop;
 
 namespace Pacman;
@@ -19,6 +20,11 @@ public sealed partial class MainWindow : Window
         RootGrid.DataContext = ViewModel;
 
         SetLightTitleBar();
+    }
+
+    private void InitializeComponent()
+    {
+        throw new NotImplementedException();
     }
 
     private void SetLightTitleBar()
