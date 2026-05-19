@@ -1,13 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Pacman.Moduls;
+using Pacman.Models;
 using Pacman.Services;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System;
 
 namespace Pacman.ViewModels;
 
@@ -16,23 +15,64 @@ public partial class MainViewModel : ObservableObject
     private readonly InstalledProgramService _programService = new();
     private readonly UninstallService _uninstallService = new();
 
+    private List<InstalledProgram> _allPrograms = [];
+
     [ObservableProperty]
     private ObservableCollection<InstalledProgram> programs = [];
+
+    [ObservableProperty]
+    private string searchText = "";
 
     public MainViewModel()
     {
         LoadPrograms();
     }
 
+    partial void OnSearchTextChanged(string value)
+    {
+        ApplyFilter();
+    }
+
     private void LoadPrograms()
     {
-        Programs = new ObservableCollection<InstalledProgram>(
-            _programService.GetInstalledPrograms());
+        _allPrograms = _programService.GetInstalledPrograms();
+        ApplyFilter();
+    }
+
+    private void ApplyFilter()
+    {
+        var filtered = string.IsNullOrWhiteSpace(SearchText)
+            ? _allPrograms
+            : _allPrograms
+                .Where(x =>
+                    x.DisplayName.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
+                    (x.Publisher?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ?? false))
+                .ToList();
+
+        Programs = new ObservableCollection<InstalledProgram>(filtered);
     }
 
     [RelayCommand]
-    private void Uninstall(InstalledProgram program)
+    private async Task Uninstall(InstalledProgram program)
     {
+        var shortcutService = new DesktopShortcutService();
+        var animationService = new PacmanAnimationService();
+
+        var shortcut = shortcutService.FindDesktopShortcutForProgram(program);
+
+        if (shortcut != null)
+        {
+            WindowMinimizeService.ShowDesktop();
+
+            await Task.Delay(500);
+
+            animationService.PlayPacmanToIcon(shortcut.Position);
+
+            await Task.Delay(1800);
+
+            shortcutService.DeleteShortcut(shortcut);
+        }
+
         _uninstallService.Uninstall(program);
     }
 }

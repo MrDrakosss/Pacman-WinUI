@@ -1,4 +1,4 @@
-﻿using Pacman.Moduls;
+﻿using Pacman.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

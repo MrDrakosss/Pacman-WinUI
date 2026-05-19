@@ -6,46 +6,71 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid x:Name="RootGrid" Padding="24">
+    <Grid
+        x:Name="RootGrid"
+        RequestedTheme="Light"
+        Background="#F5F5F5"
+        Padding="24"
+        RowDefinitions="Auto,Auto,*">
 
-        <ListView ItemsSource="{Binding Programs}">
+        <StackPanel Spacing="4">
+            <TextBlock
+                Text="Pacman Uninstaller"
+                FontSize="32"
+                FontWeight="SemiBold"
+                Foreground="#1F1F1F"/>
+
+            <TextBlock
+                Text="Telepített programok kezelése"
+                FontSize="14"
+                Foreground="#666666"/>
+        </StackPanel>
+
+        <TextBox
+            Grid.Row="1"
+            Margin="0,20,0,16"
+            Height="42"
+            PlaceholderText="Program keresése..."
+            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <ListView
+            Grid.Row="2"
+            ItemsSource="{Binding Programs}"
+            Background="Transparent">
+
             <ListView.ItemTemplate>
-
                 <DataTemplate>
-
                     <Grid
-                        Padding="12"
+                        Margin="0,0,0,10"
+                        Padding="16"
+                        Background="White"
+                        CornerRadius="12"
                         ColumnDefinitions="*,Auto">
 
                         <StackPanel Spacing="4">
-
                             <TextBlock
                                 Text="{Binding DisplayName}"
-                                FontSize="18"
-                                FontWeight="SemiBold"/>
+                                FontSize="17"
+                                FontWeight="SemiBold"
+                                Foreground="#202020"/>
 
                             <TextBlock
                                 Text="{Binding Publisher}"
-                                Opacity="0.7"/>
+                                Foreground="#666666"/>
 
                             <TextBlock
                                 Text="{Binding DisplayVersion}"
-                                Opacity="0.5"/>
-
+                                Foreground="#999999"/>
                         </StackPanel>
 
                         <Button
                             Grid.Column="1"
                             Content="Uninstall"
                             Click="UninstallButton_Click"/>
-
                     </Grid>
-
                 </DataTemplate>
-
             </ListView.ItemTemplate>
         </ListView>
 
     </Grid>
-
 </Window>

@@ -1,7 +1,10 @@
+using Microsoft.UI;
+using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Pacman.Moduls;
+using Pacman.Models;
 using Pacman.ViewModels;
+using WinRT.Interop;
 
 namespace Pacman;
 
@@ -11,9 +14,40 @@ public sealed partial class MainWindow : Window
 
     public MainWindow()
     {
-        this.InitializeComponent();
+        InitializeComponent();
 
         RootGrid.DataContext = ViewModel;
+
+        SetLightTitleBar();
+    }
+
+    private void SetLightTitleBar()
+    {
+        var hwnd = WindowNative.GetWindowHandle(this);
+        var windowId = Win32Interop.GetWindowIdFromWindow(hwnd);
+        var appWindow = AppWindow.GetFromWindowId(windowId);
+
+        appWindow.Title = "Pacman Uninstaller";
+
+        if (AppWindowTitleBar.IsCustomizationSupported())
+        {
+            var titleBar = appWindow.TitleBar;
+
+            titleBar.BackgroundColor = Colors.White;
+            titleBar.ForegroundColor = Colors.Black;
+
+            titleBar.InactiveBackgroundColor = Colors.White;
+            titleBar.InactiveForegroundColor = Colors.Gray;
+
+            titleBar.ButtonBackgroundColor = Colors.White;
+            titleBar.ButtonForegroundColor = Colors.Black;
+
+            titleBar.ButtonHoverBackgroundColor = Windows.UI.Color.FromArgb(255, 230, 230, 230);
+            titleBar.ButtonHoverForegroundColor = Colors.Black;
+
+            titleBar.ButtonPressedBackgroundColor = Windows.UI.Color.FromArgb(255, 210, 210, 210);
+            titleBar.ButtonPressedForegroundColor = Colors.Black;
+        }
     }
 
     private void UninstallButton_Click(object sender, RoutedEventArgs e)
