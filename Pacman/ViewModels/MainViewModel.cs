@@ -57,7 +57,7 @@ public partial class MainViewModel : ObservableObject
     {
         var animationService = new PacmanAnimationService();
 
-        animationService.PlayPacmanEatingAppIcon();
+        animationService.PlayPacmanEatingAppIcon(program);
         await Task.Delay(1800);
 
         _uninstallService.Uninstall(program);
