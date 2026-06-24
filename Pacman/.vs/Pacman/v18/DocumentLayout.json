@@ -3,16 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\Drakos\\Documents\\GitHub\\Pacman WinUI\\Pacman\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{97846F41-BD3F-B3A9-52ED-D96ED05390C6}|Pacman.csproj|c:\\users\\drakos\\documents\\github\\pacman winui\\pacman\\services\\programiconservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{97846F41-BD3F-B3A9-52ED-D96ED05390C6}|Pacman.csproj|solutionrelative:services\\programiconservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{97846F41-BD3F-B3A9-52ED-D96ED05390C6}|Pacman.csproj|c:\\users\\drakos\\documents\\github\\pacman winui\\pacman\\services\\pacmananimationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{97846F41-BD3F-B3A9-52ED-D96ED05390C6}|Pacman.csproj|solutionrelative:services\\pacmananimationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{97846F41-BD3F-B3A9-52ED-D96ED05390C6}|Pacman.csproj|c:\\users\\drakos\\documents\\github\\pacman winui\\pacman\\pacman.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{97846F41-BD3F-B3A9-52ED-D96ED05390C6}|Pacman.csproj|solutionrelative:pacman.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -27,40 +19,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ProgramIconService.cs",
-              "DocumentMoniker": "C:\\Users\\Drakos\\Documents\\GitHub\\Pacman WinUI\\Pacman\\Services\\ProgramIconService.cs",
-              "RelativeDocumentMoniker": "Services\\ProgramIconService.cs",
-              "ToolTip": "C:\\Users\\Drakos\\Documents\\GitHub\\Pacman WinUI\\Pacman\\Services\\ProgramIconService.cs",
-              "RelativeToolTip": "Services\\ProgramIconService.cs",
-              "ViewState": "AgIAAKwAAAAAAAAAAAAYwNsAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-24T13:56:48.643Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Pacman",
-              "DocumentMoniker": "C:\\Users\\Drakos\\Documents\\GitHub\\Pacman WinUI\\Pacman\\Pacman.csproj",
-              "RelativeDocumentMoniker": "Pacman.csproj",
-              "ToolTip": "C:\\Users\\Drakos\\Documents\\GitHub\\Pacman WinUI\\Pacman\\Pacman.csproj",
-              "RelativeToolTip": "Pacman.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAABKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-06-24T13:53:41.808Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "PacmanAnimationService.cs",
               "DocumentMoniker": "C:\\Users\\Drakos\\Documents\\GitHub\\Pacman WinUI\\Pacman\\Services\\PacmanAnimationService.cs",
               "RelativeDocumentMoniker": "Services\\PacmanAnimationService.cs",
               "ToolTip": "C:\\Users\\Drakos\\Documents\\GitHub\\Pacman WinUI\\Pacman\\Services\\PacmanAnimationService.cs",
               "RelativeToolTip": "Services\\PacmanAnimationService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAhAAAAAAAAAA==",
+              "ViewState": "AgIAAGIAAAAAAAAAAAAIwHwAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-24T13:53:10.195Z",
+              "WhenOpened": "2026-06-24T14:08:56.556Z",
               "EditorCaption": ""
             }
           ]

@@ -56,15 +56,15 @@ internal sealed class PacmanAnimationWindow : Window
             Stretch = Stretch.Uniform,
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
-            Source = CreateFallbackIcon()
+            Source = null
         };
 
         _ = LoadProgramIconAsync(program);
 
         _pacman = new Image
         {
-            Width = 120,
-            Height = 120,
+            Width = 220,
+            Height = 220,
             Stretch = Stretch.Uniform,
             Source = new BitmapImage(new Uri("ms-appx:///Assets/pacman.gif")),
             HorizontalAlignment = HorizontalAlignment.Left,
@@ -100,7 +100,12 @@ internal sealed class PacmanAnimationWindow : Window
         _pacmanLeft = _iconLeft - 430;
 
         _appIcon.Margin = new Thickness(_iconLeft, _iconTop, 0, 0);
-        _pacman.Margin = new Thickness(_pacmanLeft, _iconTop - 12, 0, 0);
+        _pacman.Margin = new Thickness(
+            _pacmanLeft,
+            _iconTop - 62,
+            0,
+            0
+        );
 
         _timer = DispatcherQueue.CreateTimer();
         _timer.Interval = TimeSpan.FromMilliseconds(16);
@@ -117,7 +122,12 @@ internal sealed class PacmanAnimationWindow : Window
     {
         _pacmanLeft += 12;
 
-        _pacman.Margin = new Thickness(_pacmanLeft, _iconTop - 12, 0, 0);
+        _pacman.Margin = new Thickness(
+            _pacmanLeft,
+            _iconTop - 62,
+            0,
+            0
+        );
 
         if (_pacmanLeft >= _iconLeft - 30)
         {
@@ -133,7 +143,7 @@ internal sealed class PacmanAnimationWindow : Window
 
     private static ImageSource TryCreateIconSource(InstalledProgram program)
     {
-        var exePath = TryResolveIconExePath(program);
+        var exePath = TryResolveIconPath(program);
 
         if (!string.IsNullOrWhiteSpace(exePath) && File.Exists(exePath))
         {
@@ -149,7 +159,7 @@ internal sealed class PacmanAnimationWindow : Window
         return CreateFallbackIcon();
     }
 
-    private static string? TryResolveIconExePath(InstalledProgram program)
+    private static string? TryResolveIconPath(InstalledProgram program)
     {
         var displayIcon = program.DisplayIcon;
 
@@ -184,42 +194,54 @@ internal sealed class PacmanAnimationWindow : Window
 
     private static string CleanIconPath(string value)
     {
-        var path = value.Trim();
+        value = value.Trim();
 
-        if (path.StartsWith("\""))
+        if (value.StartsWith("\""))
         {
-            var endQuote = path.IndexOf('"', 1);
+            var end = value.IndexOf('"', 1);
 
-            if (endQuote > 1)
-                path = path.Substring(1, endQuote - 1);
-        }
-        else
-        {
-            var commaIndex = path.IndexOf(',');
-
-            if (commaIndex > 0)
-                path = path.Substring(0, commaIndex);
-
-            var exeIndex = path.IndexOf(".exe", StringComparison.OrdinalIgnoreCase);
-
-            if (exeIndex > 0)
-                path = path.Substring(0, exeIndex + 4);
+            if (end > 1)
+                return value.Substring(1, end - 1);
         }
 
-        return path.Trim();
+        var comma = value.IndexOf(',');
+
+        if (comma > 0)
+            value = value[..comma];
+
+        return value.Trim();
     }
 
     private async Task LoadProgramIconAsync(InstalledProgram program)
     {
-        var exePath = TryResolveIconExePath(program);
+        var iconPath = TryResolveIconPath(program);
 
-        if (string.IsNullOrWhiteSpace(exePath) || !File.Exists(exePath))
+        System.Diagnostics.Debug.WriteLine($"ICON PATH: {iconPath}");
+
+        if (string.IsNullOrWhiteSpace(iconPath) || !File.Exists(iconPath))
             return;
 
-        var iconSource = await ProgramIconService.ExtractIconAsync(exePath, 96);
+        var ext = Path.GetExtension(iconPath).ToLowerInvariant();
 
-        if (iconSource != null)
-            _appIcon.Source = iconSource;
+        if (ext is ".ico" or ".png" or ".jpg" or ".jpeg" or ".bmp")
+        {
+            _appIcon.Source = new BitmapImage(new Uri(iconPath));
+            return;
+        }
+
+        if (ext is ".exe" or ".dll")
+        {
+            var iconSource = await ProgramIconService.ExtractIconAsync(iconPath, 96);
+
+            System.Diagnostics.Debug.WriteLine($"ICON SOURCE NULL: {iconSource == null}");
+
+            if (iconSource != null)
+                _appIcon.Source = iconSource;
+
+            return;
+        }
+
+        System.Diagnostics.Debug.WriteLine($"Unsupported icon file type: {ext}");
     }
 
     private static ImageSource CreateFallbackIcon()
