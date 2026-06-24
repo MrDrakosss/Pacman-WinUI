@@ -16,6 +16,8 @@ public sealed class InstalledProgram
     public string? UninstallString { get; init; }
     public string? QuietUninstallString { get; init; }
 
+    public string? IconPath { get; set; }
+
     public bool CanUninstall =>
         !string.IsNullOrWhiteSpace(UninstallString);
 }

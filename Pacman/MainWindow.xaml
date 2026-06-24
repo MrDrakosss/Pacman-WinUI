@@ -1,76 +1,88 @@
 <Window
     x:Class="Pacman.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <Grid
-        x:Name="RootGrid"
-        RequestedTheme="Light"
-        Background="#F5F5F5"
-        Padding="24"
-        RowDefinitions="Auto,Auto,*">
+    <Grid x:Name="RootGrid" Background="#F5F7FB">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="320"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <StackPanel Spacing="4">
-            <TextBlock
-                Text="Pacman Uninstaller"
-                FontSize="32"
-                FontWeight="SemiBold"
-                Foreground="#1F1F1F"/>
+        <Border Grid.Column="0" Background="#111827" Padding="28">
+            <StackPanel VerticalAlignment="Center" Spacing="18">
+                <Image Source="Assets/pacman.gif" Width="120" Height="120"/>
+                <TextBlock Text="Pacman Uninstaller"
+                           Foreground="White"
+                           FontSize="30"
+                           FontWeight="Bold"
+                           TextWrapping="Wrap"/>
+                <TextBlock Text="Válaszd ki az alkalmazást, Pacman pedig látványosan eltünteti."
+                           Foreground="#CBD5E1"
+                           FontSize="15"
+                           TextWrapping="Wrap"/>
+            </StackPanel>
+        </Border>
 
-            <TextBlock
-                Text="Telepített programok kezelése"
-                FontSize="14"
-                Foreground="#666666"/>
-        </StackPanel>
+        <Grid Grid.Column="1" Padding="34">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <TextBox
-            Grid.Row="1"
-            Margin="0,20,0,16"
-            Height="42"
-            PlaceholderText="Program keresése..."
-            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <StackPanel Spacing="10">
+                <TextBlock Text="Telepített programok"
+                           FontSize="34"
+                           FontWeight="SemiBold"
+                           Foreground="#111827"/>
 
-        <ListView
-            Grid.Row="2"
-            ItemsSource="{Binding Programs}"
-            Background="Transparent">
+                <TextBox PlaceholderText="Keresés név vagy kiadó alapján..."
+                         Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         FontSize="16"
+                         Height="46"/>
+            </StackPanel>
 
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid
-                        Margin="0,0,0,10"
-                        Padding="16"
-                        Background="White"
-                        CornerRadius="12"
-                        ColumnDefinitions="*,Auto">
+            <ListView Grid.Row="1"
+                      Margin="0,24,0,0"
+                      ItemsSource="{Binding Programs}"
+                      SelectionMode="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="White"
+                                CornerRadius="16"
+                                Padding="18"
+                                Margin="0,0,0,12">
+                            <Grid ColumnSpacing="16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                        <StackPanel Spacing="4">
-                            <TextBlock
-                                Text="{Binding DisplayName}"
-                                FontSize="17"
-                                FontWeight="SemiBold"
-                                Foreground="#202020"/>
+                                <StackPanel Spacing="5">
+                                    <TextBlock Text="{Binding DisplayName}"
+                                               FontSize="18"
+                                               FontWeight="SemiBold"
+                                               Foreground="#111827"/>
 
-                            <TextBlock
-                                Text="{Binding Publisher}"
-                                Foreground="#666666"/>
+                                    <TextBlock Text="{Binding Publisher}"
+                                               FontSize="13"
+                                               Foreground="#64748B"/>
 
-                            <TextBlock
-                                Text="{Binding DisplayVersion}"
-                                Foreground="#999999"/>
-                        </StackPanel>
+                                    <TextBlock Text="{Binding DisplayVersion}"
+                                               FontSize="12"
+                                               Foreground="#94A3B8"/>
+                                </StackPanel>
 
-                        <Button
-                            Grid.Column="1"
-                            Content="Uninstall"
-                            Click="UninstallButton_Click"/>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-
+                                <Button Grid.Column="1"
+                                        Content="Eltávolítás"
+                                        Click="UninstallButton_Click"
+                                        IsEnabled="{Binding CanUninstall}"
+                                        Padding="18,8"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
     </Grid>
 </Window>

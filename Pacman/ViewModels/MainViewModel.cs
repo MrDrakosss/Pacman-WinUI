@@ -55,28 +55,10 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private async Task Uninstall(InstalledProgram program)
     {
-        var shortcutService = new DesktopShortcutService();
         var animationService = new PacmanAnimationService();
 
-        var shortcut = shortcutService.FindDesktopShortcutForProgram(program);
-
-        if (shortcut != null)
-        {
-            WindowMinimizeService.ShowDesktop();
-
-            await Task.Delay(500);
-
-            animationService.PlayPacmanToIcon(
-                 new Windows.Foundation.Point(
-                     shortcut.Position.X,
-                     shortcut.Position.Y
-                 )
-             );
-
-            await Task.Delay(1800);
-
-            shortcutService.DeleteShortcut(shortcut);
-        }
+        animationService.PlayPacmanEatingAppIcon();
+        await Task.Delay(1800);
 
         _uninstallService.Uninstall(program);
     }
