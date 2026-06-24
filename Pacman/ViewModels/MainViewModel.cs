@@ -66,7 +66,12 @@ public partial class MainViewModel : ObservableObject
 
             await Task.Delay(500);
 
-            animationService.PlayPacmanToIcon(shortcut.Position);
+            animationService.PlayPacmanToIcon(
+                 new Windows.Foundation.Point(
+                     shortcut.Position.X,
+                     shortcut.Position.Y
+                 )
+             );
 
             await Task.Delay(1800);
 

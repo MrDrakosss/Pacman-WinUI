@@ -1,7 +1,14 @@
-﻿using System;
-using System.Drawing;
-using System.IO;
-using System.Windows.Forms;
+﻿using Microsoft.UI;
+using Microsoft.UI.Dispatching;
+using Microsoft.UI.Windowing;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Media.Imaging;
+using System;
+using Windows.Foundation;
+using Windows.Graphics;
+using WinRT.Interop;
 
 namespace Pacman.Services;
 
@@ -9,54 +16,85 @@ public sealed class PacmanAnimationService
 {
     public void PlayPacmanToIcon(Point target)
     {
-        var gifPath = Path.Combine(AppContext.BaseDirectory, "Assets", "pacman.gif");
+        var window = new PacmanAnimationWindow(target);
+        window.Activate();
+    }
+}
 
-        if (!File.Exists(gifPath))
-            return;
+internal sealed class PacmanAnimationWindow : Window
+{
+    private readonly Image _pacman;
+    private readonly DispatcherQueueTimer _timer;
+    private readonly Point _target;
 
-        var form = new Form
+    private double _left = -120;
+
+    public PacmanAnimationWindow(Point target)
+    {
+        _target = target;
+
+        var root = new Grid
         {
-            FormBorderStyle = FormBorderStyle.None,
-            StartPosition = FormStartPosition.Manual,
-            TopMost = true,
-            ShowInTaskbar = false,
-            BackColor = Color.Magenta,
-            TransparencyKey = Color.Magenta,
-            Bounds = Screen.PrimaryScreen?.Bounds ?? new Rectangle(0, 0, 1920, 1080)
+            Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent)
         };
 
-        var picture = new PictureBox
+        _pacman = new Image
         {
-            Image = Image.FromFile(gifPath),
-            SizeMode = PictureBoxSizeMode.StretchImage,
             Width = 96,
             Height = 96,
-            BackColor = Color.Transparent,
-            Left = -120,
-            Top = Math.Max(0, target.Y - 32)
+            Stretch = Stretch.Fill,
+            Source = new BitmapImage(new Uri("ms-appx:///Assets/pacman.gif")),
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Top,
+            Margin = new Thickness(_left, Math.Max(0, target.Y - 32), 0, 0)
         };
 
-        form.Controls.Add(picture);
+        root.Children.Add(_pacman);
+        Content = root;
 
-        var timer = new System.Windows.Forms.Timer
+        ExtendsContentIntoTitleBar = true;
+
+        var hwnd = WindowNative.GetWindowHandle(this);
+        var windowId = Win32Interop.GetWindowIdFromWindow(hwnd);
+        var appWindow = AppWindow.GetFromWindowId(windowId);
+
+        appWindow.MoveAndResize(new RectInt32(0, 0, 1920, 1080));
+
+        if (appWindow.Presenter is OverlappedPresenter presenter)
         {
-            Interval = 16
-        };
+            presenter.SetBorderAndTitleBar(false, false);
+            presenter.IsAlwaysOnTop = true;
+            presenter.IsResizable = false;
+            presenter.IsMaximizable = false;
+            presenter.IsMinimizable = false;
+        }
 
-        timer.Tick += (_, _) =>
+        _timer = DispatcherQueue.CreateTimer();
+        _timer.Interval = TimeSpan.FromMilliseconds(16);
+        _timer.Tick += OnTick;
+
+        Activated += (_, _) =>
         {
-            picture.Left += 18;
-
-            if (picture.Left >= target.X - 40)
-            {
-                timer.Stop();
-                form.Close();
-                form.Dispose();
-            }
+            if (!_timer.IsRunning)
+                _timer.Start();
         };
+    }
 
-        form.Shown += (_, _) => timer.Start();
+    private void OnTick(DispatcherQueueTimer sender, object args)
+    {
+        _left += 18;
 
-        form.Show();
+        _pacman.Margin = new Thickness(
+            _left,
+            Math.Max(0, _target.Y - 32),
+            0,
+            0
+        );
+
+        if (_left >= _target.X - 40)
+        {
+            _timer.Stop();
+            Close();
+        }
     }
 }
